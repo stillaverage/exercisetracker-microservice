@@ -65,7 +65,6 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
     const duration = parseInt(req.body.duration);
 
     let date = req.body.date;
-    // const dateOptions = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }
     if (!date) {
       date = new Date(Date.now()).toDateString();
     } else {
@@ -93,14 +92,11 @@ app.get('/api/users/:_id/logs', async (req, res) => {
   } else {
     const username = userDoc.username;
     const _id = userDoc._id;
-    // const log = await Exercise.find({ username }, { _id: 0, description: 1, duration: 1, date: 1 });
-    // const count = log.length;
     
     let from;
     let to;
 
     if (req.query.from) {
-      // from = new Date(req.query.from);
       const parts = req.query.from.split('-');
       const year = parseInt(parts[0]);
       const month = parseInt(parts[1]) - 1;
@@ -112,10 +108,8 @@ app.get('/api/users/:_id/logs', async (req, res) => {
       from = new Date(0).toDateString();
     }
 
-    // console.log(from)
 
     if (req.query.to) {
-      // to = new Date(req.query.to)
       const parts = req.query.to.split('-');
       const year = parseInt(parts[0]);
       const month = parseInt(parts[1]) - 1;
@@ -127,15 +121,8 @@ app.get('/api/users/:_id/logs', async (req, res) => {
       to = new Date(Date.now()).toDateString();
     }
     
-    // console.log(to)
 
     let log = await Exercise.find({ username }).select({ _id: 0, description: 1, duration: 1, date: 1 });
-
-    // if (req.query.limit) {
-    //   log = await Exercise.find({ username, date: {$gte: from, $lte: to} }).select({ _id: 0, description: 1, duration: 1, date: 1 }).limit(parseInt(req.query.limit));
-    // } else {
-    //   log = await Exercise.find({ username, date: {$gte: from, $lte: to} }).select({ _id: 0, description: 1, duration: 1, date: 1 })
-    // }
 
     log = log.filter((d, i) => new Date(d.date) >= new Date(from) && new Date(d.date) <= new Date(to))
 
